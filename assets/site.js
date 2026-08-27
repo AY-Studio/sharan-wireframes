@@ -3,9 +3,40 @@
 (function () {
   'use strict';
 
-  /* ---------------------------------------------------------- mobile navbar */
+  /* --------------------------------------------------------- navbar + mega */
   var toggle = document.querySelector('.navbar__toggle');
   var drawer = document.getElementById('nav-drawer');
+  var megaButtons = [].slice.call(document.querySelectorAll('.navbar__link--toggle'));
+  var drawerButtons = [].slice.call(document.querySelectorAll('.navdrawer__toggle'));
+
+  function closeMega(except) {
+    megaButtons.forEach(function (btn) {
+      if (btn === except) return;
+      var panel = document.getElementById(btn.getAttribute('aria-controls'));
+      btn.setAttribute('aria-expanded', 'false');
+      if (panel) panel.hidden = true;
+    });
+  }
+
+  megaButtons.forEach(function (btn) {
+    var panel = document.getElementById(btn.getAttribute('aria-controls'));
+    btn.addEventListener('click', function () {
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      closeMega(btn);
+      btn.setAttribute('aria-expanded', String(!open));
+      if (panel) panel.hidden = open;
+    });
+  });
+
+  drawerButtons.forEach(function (btn) {
+    var panel = document.getElementById(btn.getAttribute('aria-controls'));
+    btn.addEventListener('click', function () {
+      var open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      if (panel) panel.hidden = open;
+    });
+  });
+
   if (toggle && drawer) {
     toggle.addEventListener('click', function () {
       var open = toggle.getAttribute('aria-expanded') === 'true';
@@ -13,6 +44,29 @@
       drawer.setAttribute('data-open', String(!open));
     });
   }
+
+  // click outside, or Escape, closes any open mega panel
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.navbar__item')) closeMega(null);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    var openBtn = megaButtons.filter(function (b) {
+      return b.getAttribute('aria-expanded') === 'true';
+    })[0];
+    if (openBtn) { closeMega(null); openBtn.focus(); }
+  });
+
+  // crossing the breakpoint leaves nothing stuck open
+  var mq = window.matchMedia('(min-width:1100px)');
+  var onChange = function () {
+    closeMega(null);
+    if (toggle && drawer && mq.matches) {
+      toggle.setAttribute('aria-expanded', 'false');
+      drawer.setAttribute('data-open', 'false');
+    }
+  };
+  mq.addEventListener ? mq.addEventListener('change', onChange) : mq.addListener(onChange);
 
   /* ------------------------------------------------------- page spec drawer */
   var spec = document.getElementById('page-spec');
