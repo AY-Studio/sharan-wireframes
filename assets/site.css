@@ -585,3 +585,37 @@ body[data-hide-flags="true"] .badge{display:none}
 .toc li::before{content:none}
 .toc a{font-size:var(--t-sm);color:var(--c-ink-2);text-decoration:none}
 .toc a:hover{color:var(--c-ink);text-decoration:underline}
+
+/* ------------------------------------------- 30. Contextual enquiry section */
+.enquiry{display:grid;gap:var(--s-6)}
+@media (min-width:992px){
+  .enquiry{grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:var(--s-8);align-items:start}
+}
+.enquiry .form{max-width:none}
+.enquiry__aside{
+  border:1px solid var(--c-line);border-radius:var(--radius-lg);
+  background:var(--c-surface);padding:var(--s-5);
+}
+.section--alt .enquiry__aside{background:var(--c-surface-2)}
+.enquiry__aside h3{font-size:var(--t-h4);margin-bottom:var(--s-4)}
+.steps{list-style:none;counter-reset:step;margin:0 0 var(--s-5);padding:0}
+.steps li{
+  counter-increment:step;position:relative;padding-left:2.5rem;margin-bottom:var(--s-4);
+  font-size:var(--t-sm);color:var(--c-ink-2);max-width:none;
+}
+.steps li::before{
+  content:counter(step);position:absolute;left:0;top:-.05em;
+  width:1.75rem;height:1.75rem;border-radius:50%;border:1.5px solid var(--c-ink);
+  display:flex;align-items:center;justify-content:center;
+  font:700 var(--t-xs)/1 var(--font);color:var(--c-ink);
+}
+.enquiry__direct{border-top:1px solid var(--c-line);padding-top:var(--s-4);font-size:var(--t-sm)}
+.enquiry__direct p{max-width:none;color:var(--c-ink-2)}
+.enquiry__direct a{font-weight:600}
+.form__preset{
+  display:flex;flex-wrap:wrap;gap:.5rem;align-items:baseline;
+  border:1px solid var(--c-line-strong);border-radius:var(--radius);
+  background:var(--c-surface-3);padding:.6rem .85rem;margin-bottom:var(--s-5);font-size:var(--t-sm);
+}
+.form__preset b{font-weight:700}
+.form__preset span{color:var(--c-ink-2)}
